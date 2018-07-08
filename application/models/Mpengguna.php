@@ -29,54 +29,43 @@ class Mpengguna extends MY_Model
 	}
 
 
-	public function update()
+	public function update($param = 0)
 	{
 
-		$get_pass = $this->mpengguna->get_by_id($this->input->post('id'));
+		$get = $this->get();
 
-		if (password_verify($this->input->post('old_pass'), $get_pass->password) == TRUE ) 
-		{
-
-		$config['upload_path'] = './public/images/pegawai/';
+		$config['upload_path'] = './public/images/';
 		$config['allowed_types'] = 'gif|jpg|png';
-		$config['max_size']  = '5120';
-		$config['max_width']  = '4000';
-		$config['max_height']  = '3000';
 		
 		$this->upload->initialize($config);
 		
-		if($this->upload->do_upload('foto')) 
+		if ( ! $this->upload->do_upload('file_foto')) 
 		{
-			if($get_pass->foto != FALSE)
-				@unlink("public/images/pegawai/{$get_pass->foto}");
-
-			$foto = $this->upload->file_name;
-		} else {
-			$foto = $get_pass->foto;
-		}
-
-		$data = array(
-			'nama' => $this->input->post('first_name'). ' ' .$this->input->post('last_name'),
-			'alamat' => $this->input->post('alamat'),
-			'foto' => $foto
-		);
-
-		$this->db->update('kepegawaian', $data, array('ID' => $this->input->post('id')));
-
-		$data2 = array(
+			$this->template->alert(
+				$this->upload->display_errors('<span>','</span>'), 
+				array('type' => 'success','icon' => 'check')
+			);
+			$gambar = $get->photo;
 			
+		} else {
+
+			if($get->photo != 'Tidak Ada')
+				unlink("public/images/{$get->photo}");
+
+			$gambar = $this->upload->file_name;
+		}
+		$data = array(
 			'first_name' => $this->input->post('first_name'),
 			'last_name' => $this->input->post('last_name'),
 			'phone' => $this->input->post('no_tlp'),
 			'email' => $this->input->post('email'),
 			'phone' => $this->input->post('phone'),
-			
+			'photo' => $gambar			
 		);
-		if($this->input->post('new_pass') != '')
-			$data2['password'] = password_hash($this->input->post('new_pass'), PASSWORD_DEFAULT);
+		if($this->input->post('new_pass') != '') 
+			$data['password'] = password_hash($this->input->post('new_pass'), PASSWORD_DEFAULT);
 
-		$this->db->update('users', $data2, array('ID' => $this->input->post('id')));
-
+		$this->db->update('users', $data, array('id' => $this->input->post('id')));
 
 		if($this->db->affected_rows())
 		{
@@ -91,15 +80,16 @@ class Mpengguna extends MY_Model
 			);
 		}
 	
-		}else {
-			
-			$this->template->alert(
-				' Password Lama Anda Salah.', 
-				array('type' => 'danger','icon' => 'times')
-				);
 		}
+		//  else {
+			
+		// 	$this->template->alert(
+		// 		' Password Lama Anda Salah.', 
+		// 		array('type' => 'danger','icon' => 'times')
+		// 		);
+		// }
 
-	}
+	//}
 
 	public function update_user($param = 0)
 	{
@@ -108,7 +98,6 @@ class Mpengguna extends MY_Model
 			'first_name' => $this->input->post('first_name'),
 			'last_name' => $this->input->post('last_name'),
 			'active' => $this->input->post('status'),
-			
 		);
 
 		$this->db->update('users', $user, array('id' => $param));

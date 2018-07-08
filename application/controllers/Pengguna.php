@@ -55,13 +55,13 @@ class Pengguna extends admin_panel
 		$this->breadcrumbs->unshift(3, 'Pengguna Account', "pengguna/index");
 
 		$this->form_validation->set_rules('first_name', 'Nama Depan', 'trim|required');
-		$this->form_validation->set_rules('last_name', 'Nama Belakang', 'trim|required');
+		//$this->form_validation->set_rules('last_name', 'Nama Belakang', 'trim|required');
 		$this->form_validation->set_rules('new_pass', 'Password Baru', 'trim|min_length[5]');
 		$this->form_validation->set_rules('repeat_pass', 'Ini', 'trim|matches[new_pass]');
 		$this->form_validation->set_rules('old_pass', 'Password Lama', 'trim|required|callback_validate_password');
 		$this->form_validation->set_rules('email', 'E-mail', 'trim|required');
 		$this->form_validation->set_rules('old_pass', 'Password Lama', 'trim|required');
-		
+
 		if ($this->form_validation->run() == TRUE)
 		{
 			$this->mpengguna->update($param);
