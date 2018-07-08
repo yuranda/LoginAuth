@@ -45,10 +45,10 @@ echo form_hidden('id', $user->id);
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="file_excel" class="control-label col-md-3 col-xs-12">Foto : <strong class="text-red">*</strong></label>
+					<label for="file_excel" class="control-label col-md-3 col-xs-12">Foto : <strong class="text-blue">*</strong></label>
 					<div class="col-md-8">
 						<input type="file" name="file_foto" class="form-control" id="file-excel">
-						<p class="help-block"><?php echo form_error('file_excel', '<small class="text-red">', '</small>'); ?></p>
+						<p class="help-block"></p>
 					</div>
 				</div>
 				<div class="form-group" id="block-new-password">
